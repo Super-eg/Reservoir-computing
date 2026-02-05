@@ -3,22 +3,26 @@
 
 ## Introduction
 
-This project is a study and implementation repository based on the paper: *[Learning strange attractors with reservoir systems](https://arxiv.org/pdf/2108.05024)*.
+This project investigates Reservoir Computing (RC) through the lens of topological embedding theory.
 
-The primary goal of this project was to:
+We focus on analyzing how the **attractors of dynamical systems** are preserved and reconstructed within the high-dimensional reservoir space. The project also includes the implementation of both single-step and multi-step predictions.
 
-1.  **Deeply understand** the mathematical foundations of Reservoir Computing (RC) and its embedding properties.
-
-2.  **Reproduce** the proposed methodology for **one-step-ahead prediction** on chaotic systems.
-
-<p align="center">
-  <img src="images/Reservoir_Dynamics.gif" alt="dynamics" width="400">
-</p>
+<div align="center">
+    <img src="images/Reservoir_Dynamics.gif" alt="dynamics" width="80%">
+    <br>
+    <p>
+        <em>
+        <strong>Figure 1: Synchronization of Reservoir States.</strong><br>
+        <strong>Top panel:</strong> The time-series data of the Lorenz system (x-coordinate).<br>
+        <strong>Bottom panel:</strong> PCA projection of reservoir states.
+        </em>
+    </p>
+</div>
 
 
 ## Theoretical Core
 
-This implementation builds upon Theorem 4.5, which establishes that a Reservoir Computer functions as a linear embedding of the underlying dynamical system.
+This implementation builds upon the theoretical guarantee that a Reservoir Computer functions as a linear embedding of the underlying dynamical system.
 
 **Key Insight** Even with randomly initialized internal weights, the reservoir state $\mathbf{r}(t)$ synchronizes with the input system. This guarantees that the original chaotic attractor can be reconstructed solely by observing the reservoir dynamics.
 
@@ -44,7 +48,7 @@ We implemented the system using Python with the following key steps:
 
 2.  **Reservoir Projection**:
     * Mapped input data into a high-dimensional reservoir space.
-    * Utilized **Orthogonal Matrix Initialization** to control the Spectral Radius ($< 1$), ensuring the Echo State Property (ESP) is satisfied.
+    * Utilized **Orthogonal Matrix Initialization** to control the Spectral Radius ($\rho(A)< 1$), ensuring the Echo State Property (ESP) is satisfied.
 
 3.  **Training**:
     * Solved the readout weights using **Ridge Regression (L2 Regularization)** to mitigate overfitting and enhance robustness against noise.
@@ -54,18 +58,18 @@ We implemented the system using Python with the following key steps:
       Achieved high-fidelity reconstruction on the validation dataset, maintaining a low Mean Squared Error (MSE) of approximately $10^{-3}$.
 
     * **Multi-Step Prediction (Closed-loop)**: 
-      Fed the model's output back as input recursively. While the prediction remains accurate in the short term, the trajectory eventually diverges due to the system's inherent chaotic sensitivity (Butterfly Effect), with MSE rising to the single-digit range ($O(1)$) over longer horizons.
+      Fed the model's output back as input recursively. While the prediction remains accurate in the short term, the trajectory eventually diverges due to the system's inherent chaotic sensitivity.
 
 
 ## Repository Structure
 
 * `images/`: Contains all generated visualization results and figures.
-* `src/`:
-    * `anime.ipynb`: Visualizes data distribution within the Reservoir system using PCA and generates animations synchronized with the observed data.
+* `notebooks/`:
+    * `01_dynamics_visualization.ipynb`: Visualizes data distribution within the Reservoir system using PCA and generates animations synchronized with the time-series datas.
 
-    * `one_step.ipynb`: Evaluates model performance using one-step-ahead (open-loop) prediction.
+    * `02_one_step.ipynb`: Evaluates model performance using one-step-ahead (open-loop) prediction.
 
-    * `multi_step.ipynb`: Implements multi-step (closed-loop) recursive forecasting to validate long-term stability.
+    * `03_multi_step.ipynb`: Implements multi-step (closed-loop) recursive forecasting to validate long-term stability.
 
 
 ## References
